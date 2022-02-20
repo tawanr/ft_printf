@@ -6,12 +6,11 @@
 #    By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/15 23:45:11 by tratanat          #+#    #+#              #
-#    Updated: 2022/02/20 18:05:34 by tratanat         ###   ########.fr        #
+#    Updated: 2022/02/20 18:25:34 by tratanat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS = ft_printf.c	\
-		main.c	\
 		ft_itoa_base.c	\
 		ft_itoa_u.c
 
@@ -21,8 +20,10 @@ CC = gcc -Wextra -Wall -Werror
 all: $(NAME)
 
 $(NAME): $(SRCS) ft_printf.h
+	@$(MAKE) bonus -C ./libft
+	@cp ./libft/libft.a ./$(NAME)
 	@$(CC) -c $(SRCS)
-	@ar rcs $(NAME) libft.a *.o
+	@ar -rcs $(NAME) *.o
 
 clean:
 	rm -rf *.o

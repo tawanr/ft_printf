@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 22:40:52 by tratanat          #+#    #+#             */
-/*   Updated: 2022/02/20 15:29:19 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/02/20 18:26:25 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	ft_putnbr_fd(int n, int fd)
 {
 	char	*out;
 
-	if (n = -2147483648)
+	if (n == -2147483648)
 		write(1, "-2147483648", 11);
 	out = ft_itoa(n);
 	while (*out)

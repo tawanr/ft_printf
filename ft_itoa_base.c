@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 15:45:32 by tratanat          #+#    #+#             */
-/*   Updated: 2022/02/20 17:24:55 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/02/20 19:36:52 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 #include <stdio.h>
 
 int	getdigit_base(unsigned long n, int base);
-int	ft_abs_base(unsigned long n);
+int	ft_abs_base(unsigned int n);
 
-char	*ft_itoa_base(unsigned long n, int base)
+char	*ft_itoa_base(unsigned int n, int base)
 {
 	int				digit;
 	int				negative;
 	char			*out;
 	int				i;
-	unsigned long	num;
+	unsigned int	num;
 
 	negative = 0;
-	num = (unsigned long)(ft_abs_base(n));
+	num = (unsigned int)(ft_abs_base(n));
 	if (n < 0)
 		negative = 1;
 	digit = getdigit_base(num, base);
@@ -47,7 +47,7 @@ char	*ft_itoa_base(unsigned long n, int base)
 	return (out);
 }
 
-int	ft_abs_base(unsigned long n)
+int	ft_abs_base(unsigned int n)
 {
 	if (n < 0)
 		return (-n);
