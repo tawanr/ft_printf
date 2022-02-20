@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 15:45:32 by tratanat          #+#    #+#             */
-/*   Updated: 2022/02/20 19:36:52 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/02/20 22:40:29 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,19 @@
 int	getdigit_base(unsigned long n, int base);
 int	ft_abs_base(unsigned int n);
 
-char	*ft_itoa_base(unsigned int n, int base)
+char	*ft_itoa_base(unsigned long num, int base)
 {
 	int				digit;
-	int				negative;
 	char			*out;
 	int				i;
-	unsigned int	num;
 
-	negative = 0;
-	num = (unsigned int)(ft_abs_base(n));
-	if (n < 0)
-		negative = 1;
 	digit = getdigit_base(num, base);
-	out = (char *)malloc((digit + negative + 1) * sizeof(char));
+	out = (char *)malloc((digit + 1) * sizeof(char));
 	if (!out)
 		return (NULL);
-	i = digit + negative;
+	i = digit;
 	out[i--] = '\0';
-	while (i >= negative)
+	while (i >= 0)
 	{
 		if (num % base < 10)
 			out[i--] = '0' + (num % base);
@@ -42,16 +36,7 @@ char	*ft_itoa_base(unsigned int n, int base)
 			out[i--] = 'a' + ((num % base) % 10);
 		num /= base;
 	}
-	if (negative)
-		out[0] = '-';
 	return (out);
-}
-
-int	ft_abs_base(unsigned int n)
-{
-	if (n < 0)
-		return (-n);
-	return (n);
 }
 
 int	getdigit_base(unsigned long n, int base)
