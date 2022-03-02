@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 22:42:22 by tratanat          #+#    #+#             */
-/*   Updated: 2022/03/02 17:29:01 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/03 00:49:22 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,27 @@ int	ft_printadd_hex(void *ptr)
 {
 	char	*out;
 	int		printlen;
+	int		padding;
 
 	if (ptr == NULL)
-	{
 		write(1, "(nil)", 5);
+	if (ptr == NULL)
 		return (5);
-	}
 	printlen = 2;
-	write(1, "0x", 2);
 	out = ft_itoa_base((unsigned long long int)ptr, 16);
 	printlen += ft_strlen(out);
+	padding = 0;
+	if ((printf_flags(-1) >> 6) > printlen)
+		padding = (printf_flags(-1) >> 6) - printlen;
+	if ((printf_flags(-1) >> 6) > printlen)
+		printlen = printf_flags(-1) >> 6;
+	if (!(printf_flags(-1) & 1) && padding > 0)
+		while (padding-- > 0)
+			write(1, " ", 1);
+	write(1, "0x", 2);
 	ft_putstr_fd(out, 1);
+	while (padding-- > 0)
+		write(1, " ", 1);
 	free(out);
 	return (printlen);
 }
@@ -116,9 +126,9 @@ int	ft_putnbr_u(unsigned int n, int fd)
 		padding = (flags >> 6) - digits;
 	if (!(flags & 1))
 		prepad_num(flags, padding, 1, digits - ft_strlen(out));
-	while (++i < digits)
+	while (++i < (int)ft_strlen(out))
 		write(fd, out + i, 1);
-	i += padding;
+	i += (digits - ft_strlen(out)) + padding;
 	if (flags & 1)
 		while (padding-- > 0)
 			write(1, " ", 1);
@@ -149,14 +159,18 @@ int	ft_printint(long int num)
 		padding = (printf_flags(-1) >> 6) - length;
 	else
 		length += !!((flags & (1 << 4)) || (flags & (1 << 5)) || !pos);
-	if ((flags & (1 << 2)) || (flags & (1 << 1)))
+	if ((flags & (1 << 2)) || (flags & (1 << 1)) || !(flags & 1))
 		prepad_num(flags, padding, pos, p_precision(-1) - ft_strlen(output));
 	else
 		prepad_num(flags, 0, pos, p_precision(-1) - ft_strlen(output));
-	ft_putstr_fd(output, 1);
+	if (num != 0 || (!(flags & (1 << 2)) || \
+	((p_precision(-1) > 0) && num == 0)))
+		ft_putstr_fd(output, 1);
+	else if (num == 0 && p_precision(-1) == 0 && (flags >> 6) > 0)
+		write(1, " ", 1);
 	free(output);
 	length += padding;
-	if (flags & 1)
+	if ((flags & 1) && !(flags & (1 << 1)))
 		while ((padding-- > !pos || flags & (1 << 5) || flags & (1 << 4)))
 			write(1, " ", 1);
 	return (length);

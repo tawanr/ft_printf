@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 21:39:08 by tratanat          #+#    #+#             */
-/*   Updated: 2022/03/02 17:30:45 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/02 23:27:16 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ void	prepad_num(int flags, int padding, int positive, int precision)
 	{
 		if (flags & (1 << 1))
 			write(1, "0", 1);
-		else
+		else if (!(flags & 1) && !(flags & (1 << 1)))
 			write(1, " ", 1);
 	}
 	if (flags & (1 << 5) && !(flags & (1 << 1)))
