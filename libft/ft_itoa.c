@@ -6,25 +6,25 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 21:30:17 by tratanat          #+#    #+#             */
-/*   Updated: 2022/02/15 21:30:17 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/02 13:24:20 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdio.h>
 
-int	getdigit(unsigned int n);
-int	ft_abs(int n);
+long int	ft_abs(long int n);
 
-char	*ft_itoa(int n)
+char	*ft_itoa(long int n)
 {
 	int				digit;
 	int				negative;
 	char			*out;
 	int				i;
-	unsigned int	num;
+	long int		num;
 
 	negative = 0;
-	num = (unsigned int)(ft_abs(n));
+	num = (ft_abs(n));
 	if (n < 0)
 		negative = 1;
 	digit = getdigit(num);
@@ -43,14 +43,14 @@ char	*ft_itoa(int n)
 	return (out);
 }
 
-int	ft_abs(int n)
+long int	ft_abs(long int n)
 {
 	if (n < 0)
-		return (-n);
+		return (n * -1);
 	return (n);
 }
 
-int	getdigit(unsigned int n)
+int	getdigit(long int n)
 {
 	int	digit;
 

@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 22:42:22 by tratanat          #+#    #+#             */
-/*   Updated: 2022/02/20 22:43:26 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:40:01 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ int	ft_printadd_hex(void *ptr)
 	}
 	printlen = 2;
 	write(1, "0x", 2);
-	out = ft_itoa_base((unsigned long)ptr, 16);
-	ft_putstr_fd(out, 1);
+	out = ft_itoa_base((unsigned long long int)ptr, 16);
 	printlen += ft_strlen(out);
+	ft_putstr_fd(out, 1);
 	free(out);
 	return (printlen);
 }
 
-int	ft_printhex_low(int ptr)
+int	ft_printhex_low(long int ptr)
 {
 	unsigned int	hex;
 	int				negative_num;
@@ -43,10 +43,10 @@ int	ft_printhex_low(int ptr)
 	if (ptr < 0)
 	{
 		ptr = -ptr;
-		hex = (unsigned int)((ptr ^ negative_num) + 1);
+		hex = (unsigned long int)((ptr ^ negative_num) + 1);
 	}
 	else
-		hex = (unsigned int)ptr;
+		hex = (unsigned long int)ptr;
 	result = ft_itoa_base(hex, 16);
 	ft_putstr_fd(result, 1);
 	length = ft_strlen(result);
@@ -54,7 +54,7 @@ int	ft_printhex_low(int ptr)
 	return (length);
 }
 
-int	ft_printhex_up(int ptr)
+int	ft_printhex_up(long int ptr)
 {
 	unsigned int	hex;
 	int				negative_num;
@@ -66,17 +66,14 @@ int	ft_printhex_up(int ptr)
 	if (ptr < 0)
 	{
 		ptr = -ptr;
-		hex = (unsigned int)((ptr ^ negative_num) + 1);
+		hex = (unsigned long int)((ptr ^ negative_num) + 1);
 	}
 	else
-		hex = (unsigned int)ptr;
+		hex = (unsigned long int)ptr;
 	result = ft_itoa_base(hex, 16);
-	i = 0;
-	while (i < ft_strlen(result))
-	{
+	i = -1;
+	while (++i < ft_strlen(result))
 		result[i] = ft_toupper(result[i]);
-		i++;
-	}
 	ft_putstr_fd(result, 1);
 	length = ft_strlen(result);
 	free(result);

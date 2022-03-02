@@ -6,17 +6,16 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 15:45:32 by tratanat          #+#    #+#             */
-/*   Updated: 2022/02/20 22:40:29 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/02 16:43:44 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include <stdio.h>
 
-int	getdigit_base(unsigned long n, int base);
-int	ft_abs_base(unsigned int n);
+int	getdigit_base(unsigned long long int n, int base);
 
-char	*ft_itoa_base(unsigned long num, int base)
+char	*ft_itoa_base(unsigned long long int num, int base)
 {
 	int				digit;
 	char			*out;
@@ -39,7 +38,7 @@ char	*ft_itoa_base(unsigned long num, int base)
 	return (out);
 }
 
-int	getdigit_base(unsigned long n, int base)
+int	getdigit_base(unsigned long long int n, int base)
 {
 	int	digit;
 
