@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 22:42:22 by tratanat          #+#    #+#             */
-/*   Updated: 2022/03/03 00:49:22 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/03 15:37:20 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,11 @@ int	ft_printadd_hex(void *ptr)
 	int		printlen;
 	int		padding;
 
+	printlen = !!(ptr) * 2;
 	if (ptr == NULL)
-		write(1, "(nil)", 5);
-	if (ptr == NULL)
-		return (5);
-	printlen = 2;
-	out = ft_itoa_base((unsigned long long int)ptr, 16);
+		out = ft_strdup("(nil)");
+	else
+		out = ft_itoa_base((unsigned long long int)ptr, 16);
 	printlen += ft_strlen(out);
 	padding = 0;
 	if ((printf_flags(-1) >> 6) > printlen)
@@ -35,7 +34,8 @@ int	ft_printadd_hex(void *ptr)
 	if (!(printf_flags(-1) & 1) && padding > 0)
 		while (padding-- > 0)
 			write(1, " ", 1);
-	write(1, "0x", 2);
+	if (ft_strncmp(out, "(nil)", 4))
+		write(1, "0x", 2);
 	ft_putstr_fd(out, 1);
 	while (padding-- > 0)
 		write(1, " ", 1);
@@ -48,25 +48,19 @@ int	ft_printhex_low(long int ptr)
 	unsigned int	hex;
 	char			*result;
 	int				length;
-	int				padding;
 
-	padding = printf_flags(-1) >> 6;
 	if (ptr == 0)
-	{
-		if (!(printf_flags(-1) & 1))
-			prepad_num(printf_flags(-1), padding - 1, 1, p_precision(-1) - 1);
-		write(1, "0", 1);
-		while (padding-- > 1 && printf_flags(-1) & 1)
-			write(1, " ", 1);
-		if (printf_flags(-1) >> 6)
-			return (printf_flags(-1) >> 6);
-		return (1);
-	}
+		return (ft_printf_numzero());
 	if (ptr < 0)
 		hex = (unsigned long int)(((-ptr) ^ 0xFFFFFFFF) + 1);
 	else
 		hex = (unsigned long int)ptr;
 	result = ft_itoa_base(hex, 16);
+	if (*result == '0' && ft_strlen(result) == 1)
+	{
+		free(result);
+		return (ft_printf_numzero());
+	}
 	length = printf_hex(result, 0);
 	free(result);
 	return (length);
@@ -78,26 +72,19 @@ int	ft_printhex_up(long int ptr)
 	char			*result;
 	size_t			i;
 	int				length;
-	int				padding;
 
-	padding = 0;
-	padding = printf_flags(-1) >> 6;
 	if (ptr == 0)
-	{
-		if (!(printf_flags(-1) & 1))
-			prepad_num(printf_flags(-1), padding - 1, 1, p_precision(-1) - 1);
-		write(1, "0", 1);
-		while (padding-- > 1 && printf_flags(-1) & 1)
-			write(1, " ", 1);
-		if (printf_flags(-1) >> 6)
-			return (printf_flags(-1) >> 6);
-		return (1);
-	}
+		return (ft_printf_numzero());
 	if (ptr < 0)
 		hex = (unsigned long int)(((-ptr) ^ 0xFFFFFFFF) + 1);
 	else
 		hex = (unsigned long int)ptr;
 	result = ft_itoa_base(hex, 16);
+	if (*result == '0' && ft_strlen(result) == 1)
+	{
+		free(result);
+		return (ft_printf_numzero());
+	}
 	i = -1;
 	while (++i < ft_strlen(result))
 		result[i] = ft_toupper(result[i]);
@@ -106,72 +93,44 @@ int	ft_printhex_up(long int ptr)
 	return (length);
 }
 
-int	ft_putnbr_u(unsigned int n, int fd)
+int	ft_printf_numzero(void)
 {
-	char	*out;
-	int		digits;
-	int		i;
-	int		padding;
-	int		flags;
+	int	padding;
+	int	i;
 
-	i = -1;
-	padding = 0;
-	flags = printf_flags(-1);
-	out = ft_itoa_u(n);
-	digits = ft_strlen(out);
-	if (flags & (1 << 2))
-		if (p_precision(-1) > digits)
-			digits = p_precision(-1);
-	if ((flags >> 6) > digits)
-		padding = (flags >> 6) - digits;
-	if (!(flags & 1))
-		prepad_num(flags, padding, 1, digits - ft_strlen(out));
-	while (++i < (int)ft_strlen(out))
-		write(fd, out + i, 1);
-	i += (digits - ft_strlen(out)) + padding;
-	if (flags & 1)
-		while (padding-- > 0)
-			write(1, " ", 1);
-	free(out);
-	return (i);
+	i = 0;
+	padding = printf_flags(-1) >> 6;
+	if ((printf_flags(-1) & (1 << 2)) || printf_flags(-1) & (1 << 1))
+	{
+		if (printf_flags(-1) & (1 << 2))
+			while (i++ < padding - p_precision(-1))
+				write(1, " ", 1);
+		else
+			while (i++ < padding - 1)
+				write(1, "0", 1);
+		i = 0;
+		while (i++ < p_precision(-1))
+			write(1, "0", 1);
+		if (p_precision(-1) == 0 && !(printf_flags(-1) & (1 << 2)))
+			write(1, "0", 1);
+	}
+	else
+		padding_space("0", padding - 1);
+	return (check_zero_return());
 }
 
-int	ft_printint(long int num)
+int	check_zero_return(void)
 {
-	int		pos;
-	char	*output;
-	int		padding;
-	int		length;
-	int		flags;
+	int	prec;
+	int	flags;
 
-	pos = 1;
-	padding = 0;
 	flags = printf_flags(-1);
-	if (num < 0)
-		pos = 0;
-	if (num < 0)
-		num = -num;
-	output = ft_itoa(num);
-	length = ft_strlen(output);
-	if ((flags & (1 << 2)) && p_precision(-1) > length)
-		length = p_precision(-1);
-	if ((flags >> 6) > length)
-		padding = (printf_flags(-1) >> 6) - length;
-	else
-		length += !!((flags & (1 << 4)) || (flags & (1 << 5)) || !pos);
-	if ((flags & (1 << 2)) || (flags & (1 << 1)) || !(flags & 1))
-		prepad_num(flags, padding, pos, p_precision(-1) - ft_strlen(output));
-	else
-		prepad_num(flags, 0, pos, p_precision(-1) - ft_strlen(output));
-	if (num != 0 || (!(flags & (1 << 2)) || \
-	((p_precision(-1) > 0) && num == 0)))
-		ft_putstr_fd(output, 1);
-	else if (num == 0 && p_precision(-1) == 0 && (flags >> 6) > 0)
-		write(1, " ", 1);
-	free(output);
-	length += padding;
-	if ((flags & 1) && !(flags & (1 << 1)))
-		while ((padding-- > !pos || flags & (1 << 5) || flags & (1 << 4)))
-			write(1, " ", 1);
-	return (length);
+	prec = p_precision(-1);
+	if ((flags & (1 << 2)) && prec > (flags >> 6))
+		return (prec);
+	else if ((flags & (1 << 2)) && p_precision(-1) == 0)
+		return (flags >> 6);
+	else if (!(flags & (1 << 2)) && (flags >> 6) == 0)
+		return (1);
+	return (flags >> 6);
 }

@@ -6,7 +6,7 @@
 #    By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/15 23:45:11 by tratanat          #+#    #+#              #
-#    Updated: 2022/03/01 09:16:09 by tratanat         ###   ########.fr        #
+#    Updated: 2022/03/03 15:16:27 by tratanat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ BONUS_SRCS = ft_printf_bonus.c	\
 				ft_itoa_u.c	\
 				ft_printftype_bonus.c	\
 				ft_flagformat_bonus.c	\
-				ft_printf_padding_bonus.c
+				ft_printf_padding_bonus.c	\
+				ft_printf_flags_bonus.c
 
 NAME = libftprintf.a
 CC = gcc -Wextra -Wall -Werror

@@ -6,7 +6,7 @@
 /*   By: tratanat <tawan.rtn@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 22:59:58 by tratanat          #+#    #+#             */
-/*   Updated: 2022/03/02 17:15:01 by tratanat         ###   ########.fr       */
+/*   Updated: 2022/03/03 15:01:40 by tratanat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,8 @@ int		get_flags(const char *str);
 int		p_precision(int precision);
 void	padding_space(char *output, int padding);
 int		ft_printint(long int num);
+int		ft_printf_numzero(void);
+int		check_zero_return(void);
+int		ft_intpadding(long int *num, char *output, int *padding, int *pos);
 
 #endif
